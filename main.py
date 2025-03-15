@@ -12,9 +12,7 @@ def print_hi(name):
 
 if __name__ == '__main__':
     g=Genetic(20,20,1,1,1)
-    print(g.population[0].chromosom_value)
-    print(g.population[1].chromosom_value)
-    g.crossing(g.population[0],g.population[1],100,4)
+    g.mutation(30,3)
 
 
 

@@ -37,7 +37,16 @@ class Genetic:
             best_ind.append(ind)
         return best_ind
 
-    def crossing(self,specimen1 ,specimen2,chance,type=1):
+#TODO zapis nowej populacji
+    def crossing(self,specimen1,specimen2,chance,type=1):
+
+        """
+        Type:
+        1 - krzyżowanie jednopuktowe
+        2 - krzyżowanie dwupunktowe
+        3 - krzyżowanie jednorodne
+        4 - krzyżowanie ziarniste - W JEGO WYNIKU TWORZONY JEST JEDEN OSOBNIK
+        """
 
         alfa=np.random.randint(0, 100)
 
@@ -47,15 +56,11 @@ class Genetic:
 
             if type==1:
                 cut_point=np.random.randint(0, self.chromosom_size)
-                print(cut_point)
 
                 c1.extend(specimen1.chromosom_value[:cut_point])
                 c1.extend(specimen2.chromosom_value[cut_point:])
                 c2.extend(specimen2.chromosom_value[:cut_point])
                 c2.extend(specimen1.chromosom_value[cut_point:])
-
-                print("c1 "+str(c1))
-                print("c2 "+str(c2))
 
             elif type==2:
 
@@ -65,9 +70,6 @@ class Genetic:
                 while cut_point1==cut_point2 or abs(cut_point1-cut_point2)==1:
                     cut_point1 = np.random.randint(0, self.chromosom_size)
                     cut_point2 = np.random.randint(0, self.chromosom_size)
-
-                print(cut_point1)
-                print(cut_point2)
 
                 if cut_point1<cut_point2:
                     c1.extend(specimen1.chromosom_value[:cut_point1])
@@ -83,8 +85,6 @@ class Genetic:
                     c2.extend(specimen2.chromosom_value[:cut_point2])
                     c2.extend(specimen1.chromosom_value[cut_point2:cut_point1])
                     c2.extend(specimen2.chromosom_value[cut_point1:])
-                print("c1 " + str(c1))
-                print("c2 " + str(c2))
 
             elif type == 3:
 
@@ -97,8 +97,6 @@ class Genetic:
                     else:
                         c1.append(specimen1.chromosom_value[i])
                         c2.append(specimen2.chromosom_value[i])
-                print("c1 " + str(c1))
-                print("c2 " + str(c2))
 
             else:
 
@@ -109,7 +107,65 @@ class Genetic:
                         c1.append(specimen1.chromosom_value[i])
                     else:
                         c1.append(specimen2.chromosom_value[i])
-                print("c1 " + str(c1))
+
+    # TODO zapis nowej populacji
+    def mutation(self,chance,type=1):
+
+        """
+        Type:
+        1 - mutacja brzegowa
+        2 - mutacja jednopunktowa
+        3 - mutacja dwupunktowa
+        """
+
+        for i in range(0,self.population_size):
+            alfa = np.random.randint(0, 100)
+
+            if alfa <= chance:
+
+                if type==1:
+                    beta=np.random.randint(2)
+
+                    if beta==0:
+
+                        if self.population[i].chromosom_value[0]==0:
+                            self.population[i].chromosom_value[0]=1
+                        else:
+                            self.population[i].chromosom_value[0]=0
+                    else:
+                        if self.population[i].chromosom_value[self.chromosom_size-1]==0:
+                            self.population[i].chromosom_value[self.chromosom_size-1]=1
+                        else:
+                            self.population[i].chromosom_value[self.chromosom_size-1]=0
+
+                elif type==2:
+                    mut_point = np.random.randint(0, self.chromosom_size)
+
+                    if self.population[i].chromosom_value[mut_point] == 0:
+                        self.population[i].chromosom_value[mut_point] = 1
+                    else:
+                        self.population[i].chromosom_value[mut_point] = 0
+
+                elif type==3:
+                    mut_point1=0
+                    mut_point2=0
+
+                    while mut_point1==mut_point2:
+                        mut_point1 = np.random.randint(0, self.chromosom_size)
+                        mut_point2 = np.random.randint(0, self.chromosom_size)
+
+                    if self.population[i].chromosom_value[mut_point1] == 0:
+                        self.population[i].chromosom_value[mut_point1] = 1
+                    else:
+                        self.population[i].chromosom_value[mut_point1] = 0
+
+                    if self.population[i].chromosom_value[mut_point2] == 0:
+                        self.population[i].chromosom_value[mut_point2] = 1
+                    else:
+                        self.population[i].chromosom_value[mut_point2] = 0
+
+
+
 
 
 
