@@ -1,3 +1,6 @@
+import math
+import random
+
 import numpy as np
 
 from Chromosom import Chromosom
@@ -11,8 +14,11 @@ def print_hi(name):
 
 
 if __name__ == '__main__':
-    g=Genetic(20,20,1,1,1)
-    g.mutation(30,3)
+    g=Genetic(20,20,-5.12,5.12,1)
+    g.adapt()
+
+
+
 
 
 
