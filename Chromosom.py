@@ -8,5 +8,5 @@ class Chromosom:
         if random:
             self.chromosom_value=np.random.randint(2,size=self.number_of_bits)
 
-        def set_chromosom(self,chromosom_value):
-            self.chromosom_value=chromosom_value
+    def set_chromosom(self,chromosom_value):
+        self.chromosom_value=chromosom_value

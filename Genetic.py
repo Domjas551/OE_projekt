@@ -21,7 +21,7 @@ class Genetic:
                 int(''.join(map(str,specimen.chromosom_value)),2)*
                 (self.upper_border-self.lower_border)/
                 (pow(2,self.chromosom_size)-1)]
-    #TODO zweryfikować poprawność z prowadzącym
+
     def fitness_function(self,specimen) -> float:
         x=self.decode_specimen(specimen)
         N=len(x)
@@ -136,13 +136,6 @@ class Genetic:
 
         return new_pop
 
-
-
-
-
-
-
-#TODO zapis nowej populacji
     def crossing(self,specimen1,specimen2,chance,type=1):
 
         """
@@ -166,6 +159,13 @@ class Genetic:
                 c1.extend(specimen2.chromosom_value[cut_point:])
                 c2.extend(specimen2.chromosom_value[:cut_point])
                 c2.extend(specimen1.chromosom_value[cut_point:])
+
+                ch1=Chromosom(len(c1))
+                ch2=Chromosom(len(c1))
+                ch1.set_chromosom(c1)
+                ch2.set_chromosom(c2)
+
+                return [ch1,ch2]
 
             elif type==2:
 
@@ -191,6 +191,13 @@ class Genetic:
                     c2.extend(specimen1.chromosom_value[cut_point2:cut_point1])
                     c2.extend(specimen2.chromosom_value[cut_point1:])
 
+                ch1 = Chromosom(len(c1))
+                ch2 = Chromosom(len(c1))
+                ch1.set_chromosom(c1)
+                ch2.set_chromosom(c2)
+
+                return [ch1, ch2]
+
             elif type == 3:
 
                 for i in range(0,self.chromosom_size):
@@ -203,7 +210,14 @@ class Genetic:
                         c1.append(specimen1.chromosom_value[i])
                         c2.append(specimen2.chromosom_value[i])
 
-            else:
+                ch1 = Chromosom(len(c1))
+                ch2 = Chromosom(len(c1))
+                ch1.set_chromosom(c1)
+                ch2.set_chromosom(c2)
+
+                return [ch1, ch2]
+
+            elif type==4:
 
                 for i in range(0,self.chromosom_size):
                     alfa = np.random.randint(0, 100)
@@ -213,8 +227,14 @@ class Genetic:
                     else:
                         c1.append(specimen2.chromosom_value[i])
 
-    # TODO zapis nowej populacji
-    def mutation(self,chance,type=1):
+                ch1 = Chromosom(len(c1))
+                ch1.set_chromosom(c1)
+
+                return [ch1]
+        else:
+            return -1
+
+    def mutation(self,population,chance,type=1):
 
         """
         Type:
@@ -223,7 +243,7 @@ class Genetic:
         3 - mutacja dwupunktowa
         """
 
-        for i in range(0,self.population_size):
+        for i in range(0,len(population)):
             alfa = np.random.randint(0, 100)
 
             if alfa <= chance:
@@ -233,23 +253,23 @@ class Genetic:
 
                     if beta==0:
 
-                        if self.population[i].chromosom_value[0]==0:
-                            self.population[i].chromosom_value[0]=1
+                        if population[i].chromosom_value[0]==0:
+                            population[i].chromosom_value[0]=1
                         else:
-                            self.population[i].chromosom_value[0]=0
+                            population[i].chromosom_value[0]=0
                     else:
-                        if self.population[i].chromosom_value[self.chromosom_size-1]==0:
-                            self.population[i].chromosom_value[self.chromosom_size-1]=1
+                        if population[i].chromosom_value[self.chromosom_size-1]==0:
+                            population[i].chromosom_value[self.chromosom_size-1]=1
                         else:
-                            self.population[i].chromosom_value[self.chromosom_size-1]=0
+                            population[i].chromosom_value[self.chromosom_size-1]=0
 
                 elif type==2:
                     mut_point = np.random.randint(0, self.chromosom_size)
 
-                    if self.population[i].chromosom_value[mut_point] == 0:
-                        self.population[i].chromosom_value[mut_point] = 1
+                    if population[i].chromosom_value[mut_point] == 0:
+                        population[i].chromosom_value[mut_point] = 1
                     else:
-                        self.population[i].chromosom_value[mut_point] = 0
+                        population[i].chromosom_value[mut_point] = 0
 
                 elif type==3:
                     mut_point1=0
@@ -259,19 +279,19 @@ class Genetic:
                         mut_point1 = np.random.randint(0, self.chromosom_size)
                         mut_point2 = np.random.randint(0, self.chromosom_size)
 
-                    if self.population[i].chromosom_value[mut_point1] == 0:
-                        self.population[i].chromosom_value[mut_point1] = 1
+                    if population[i].chromosom_value[mut_point1] == 0:
+                        population[i].chromosom_value[mut_point1] = 1
                     else:
-                        self.population[i].chromosom_value[mut_point1] = 0
+                        population[i].chromosom_value[mut_point1] = 0
 
-                    if self.population[i].chromosom_value[mut_point2] == 0:
-                        self.population[i].chromosom_value[mut_point2] = 1
+                    if population[i].chromosom_value[mut_point2] == 0:
+                        population[i].chromosom_value[mut_point2] = 1
                     else:
-                        self.population[i].chromosom_value[mut_point2] = 0
+                        population[i].chromosom_value[mut_point2] = 0
 
-    def inversion(self,chance):
+    def inversion(self,population, chance):
 
-        for i in range(0,self.population_size):
+        for i in range(0,len(population)):
             alfa = np.random.randint(0, 100)
 
             if alfa<= chance:
@@ -284,26 +304,114 @@ class Genetic:
                     cut_point2 = np.random.randint(0, self.chromosom_size)
 
                 if cut_point1 < cut_point2:
-                    c1=self.population[i].chromosom_value[cut_point1:cut_point2]
+                    c1=population[i].chromosom_value[cut_point1:cut_point2]
                     c2=list(reversed(c1))
-                    self.population[i].chromosom_value[cut_point1:cut_point2]=c2
+                    population[i].chromosom_value[cut_point1:cut_point2]=c2
                 else:
-                    c1 = self.population[i].chromosom_value[cut_point2:cut_point1]
+                    c1 = population[i].chromosom_value[cut_point2:cut_point1]
                     c2 = list(reversed(c1))
-                    self.population[i].chromosom_value[cut_point2:cut_point1] = c2
+                    population[i].chromosom_value[cut_point2:cut_point1] = c2
 
-    def adapt(self):
+    def adapt(self,type_s,type_c,type_m,chance_c,chance_m,chance_in,elite_amount=2,t_size=3,t_amount=2):
 
         """
+        type_s - typ selekcji, 1 - best, 2 - roullete, 3 - tournament
+        type_c - typ krzyżowania, 1 - jednopunktowe, 2 - dwupunktowe, 3 - jednorodne, 4 - ziarniste
+        type_m - typ mutacji, 1 - brzegowa, 2 - jednopunktowa, 3 - dwupunktowa
+        chance_c - szansa na krzyżowanie
+        chance_m - szansa mutacji
+        chance_in - szansa na inwersje
+        elite_amount - ilość osobników wybieranych w strategi elitarnej
+        t_size - ilość osobników w grupach w selekcji turniejowej
+        t_amount - ilość rund w selekcji turniejowej
                 for i in range(0,self.epochs):
                 np.random.randint(0, self.population_size)
         """
-        fitness_list=[]
-        pop2=[]
 
+        for e in range(0,self.epochs):
+
+            fitness_list=[]
+            pop2=[]
+            new_pop=[]
+            base_pop=[]
+
+            #utworzenie tablicy z obliczonymi wartościami fitness function
+            for i in range(0, self.population_size):
+                fitness_list.append(self.fitness_function(self.population[i]))
+
+            #strategia elitarna
+            new_pop.extend(self.selection_best(elite_amount,fitness_list))
+
+            #selekcja
+            if type_s==1:
+                base_pop.extend(self.selection_best(self.population_size//2, fitness_list))
+            elif type_s==2:
+                base_pop.extend(self.selection_roullete(self.population_size//2, fitness_list))
+            elif type_s==3:
+                base_pop.extend(self.selection_tournament(self.population_size//2,t_size,t_amount,fitness_list))
+
+            #krzyżowanie
+            while len(new_pop)<self.population_size:
+
+                spec1=0
+                spec2=0
+
+                while spec1==spec2:
+                    spec1 = np.random.randint(0, len(base_pop))
+                    spec2 = np.random.randint(0, len(base_pop))
+
+                if type_c==1:
+                    if len(new_pop)==self.population_size-1:
+                        a=self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 1)[0]
+                        if a!=-1:
+                            new_pop.extend(a)
+                    else:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 1)
+                        if a!=-1:
+                            new_pop.extend(a)
+                elif type_c==2:
+                    if len(new_pop) == self.population_size - 1:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 2)[0]
+                        if a!=-1:
+                            new_pop.extend(a)
+                    else:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 2)
+                        if a!=-1:
+                            new_pop.extend(a)
+                elif type_c==3:
+                    if len(new_pop) == self.population_size - 1:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 3)[0]
+                        if a!=-1:
+                            new_pop.extend(a)
+                    else:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 3)
+                        if a!=-1:
+                            new_pop.extend(a)
+                elif type_c==4:
+                    a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 4)
+                    if a!=-1:
+                        new_pop.extend(a)
+
+            #mutacja
+            self.mutation(new_pop,chance_m,type_m)
+
+            #inwersja
+            self.inversion(new_pop,chance_m)
+
+            #zapisanie nowej populacji
+            self.population=new_pop
+
+            # sprawdzenie uzyskanych wartości
+            for i in range(0, self.population_size):
+                fitness_list.append(self.fitness_function(new_pop[i]))
+            print(fitness_list)
+
+        #wypisanie najlepszego rozwiązania
+        fl=[]
         for i in range(0, self.population_size):
-            fitness_list.append(self.fitness_function(self.population[i]))
-
-        print(fitness_list)
-
+            fl.append(self.fitness_function(self.population[i]))
+        solution=self.selection_best(1,fl)[0]
+        print(solution)
+        print(solution.chromosom_value)
+        print(self.fitness_function(solution))
 

@@ -14,8 +14,8 @@ def print_hi(name):
 
 
 if __name__ == '__main__':
-    g=Genetic(20,20,-5.12,5.12,1)
-    g.adapt()
+    g=Genetic(20,20,-5.12,5.12,2)
+    g.adapt(3,4,3,70,20,10)
 
 
 
