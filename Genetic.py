@@ -324,8 +324,6 @@ class Genetic:
         elite_amount - ilość osobników wybieranych w strategi elitarnej
         t_size - ilość osobników w grupach w selekcji turniejowej
         t_amount - ilość rund w selekcji turniejowej
-                for i in range(0,self.epochs):
-                np.random.randint(0, self.population_size)
         """
 
         for e in range(0,self.epochs):
@@ -396,7 +394,7 @@ class Genetic:
             self.mutation(new_pop,chance_m,type_m)
 
             #inwersja
-            self.inversion(new_pop,chance_m)
+            self.inversion(new_pop,chance_in)
 
             #zapisanie nowej populacji
             self.population=new_pop
