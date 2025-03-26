@@ -1,0 +1,4 @@
+#########################
+Aby gui zadziałało niezbędna jest instalacja PyQt6
+
+pip install PyQt6
