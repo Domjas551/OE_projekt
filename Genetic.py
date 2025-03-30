@@ -171,7 +171,7 @@ class Genetic:
 
                 cut_point1 = 0
                 cut_point2 = 0
-                #TODO krzyżowanie na 1 bit?
+
                 while cut_point1==cut_point2 or abs(cut_point1-cut_point2)==1:
                     cut_point1 = np.random.randint(0, self.chromosom_size)
                     cut_point2 = np.random.randint(0, self.chromosom_size)
@@ -298,7 +298,7 @@ class Genetic:
 
                 cut_point1 = 0
                 cut_point2 = 0
-                #TODO reverse na 1 bit?
+
                 while cut_point1 == cut_point2 or abs(cut_point1 - cut_point2) == 1:
                     cut_point1 = np.random.randint(0, self.chromosom_size)
                     cut_point2 = np.random.randint(0, self.chromosom_size)
