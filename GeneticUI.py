@@ -98,13 +98,39 @@ class GeneticUI(QWidget):
         self.plot_button.setEnabled(True)
 
     def save_results(self):
-        """ Zapisuje wyniki do pliku """
-        with open("wyniki_genetyczne.txt", "w") as file:
-            file.write("Wyniki fitness dla populacji:\n")
-            file.write(", ".join(map(str, self.results)) + "\n\n")
-            file.write("Najlepszy wynik fitness: " + str(min(self.results)))
+      """ Zapisuje wyniki do pliku, dodając je do istniejących danych """
+      # Pobranie parametrów z UI
+      population_size = int(self.inputs["Population Size"].text())
+      chromosom_size = int(self.inputs["Chromosom Size"].text())
+      min_range = float(self.inputs["Min Range"].text())
+      max_range = float(self.inputs["Max Range"].text())
+      epochs = int(self.inputs["Epochs"].text())
+      type_s = int(self.inputs["Selection Type (1-Best, 2-Roulette, 3-Tournament)"].text())
+      type_c = int(self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"].text())
+      type_m = int(self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"].text())
+      chance_c = int(self.inputs["Crossover Chance"].text())
+      chance_m = int(self.inputs["Mutation Chance"].text())
+      chance_in = int(self.inputs["Inversion Chance"].text())
 
-        self.result_text.append("\nWyniki zapisane do 'wyniki_genetyczne.txt'")
+      # Zapis do pliku
+      with open("wyniki_genetyczne.txt", "a") as file:
+          file.write("---- Wyniki dla parametrów ----\n")
+          file.write(f"Rozmiar populacji: {population_size}\n")
+          file.write(f"Rozmiar chromosomu: {chromosom_size}\n")
+          file.write(f"Zakres: ({min_range}, {max_range})\n")
+          file.write(f"Liczba epok: {epochs}\n")
+          file.write(f"Typ selekcji: {type_s}\n")
+          file.write(f"Typ krzyżowania: {type_c}\n")
+          file.write(f"Typ mutacji: {type_m}\n")
+          file.write(f"Szansa na krzyżowanie: {chance_c}%\n")
+          file.write(f"Szansa na mutację: {chance_m}%\n")
+          file.write(f"Szansa na inwersję: {chance_in}%\n\n")
+
+          file.write("Wyniki fitness dla populacji:\n")
+          file.write(", ".join(map(str, self.results)) + "\n\n")
+          file.write("Najlepszy wynik fitness: " + str(min(self.results)) + "\n\n")
+
+      self.result_text.append("\nWyniki zapisane do 'wyniki_genetyczne.txt' wraz z parametrami")
 
     def plot_results(self):
         """ Rysuje wykres wyników fitness """
