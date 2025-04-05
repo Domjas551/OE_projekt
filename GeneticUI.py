@@ -1,8 +1,7 @@
 import sys
 import matplotlib.pyplot as plt
-from PyQt6.QtWidgets import (
-    QApplication, QWidget, QLabel, QVBoxLayout, QPushButton, QLineEdit, QTextEdit
-)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QApplication
+
 from Genetic import Genetic
 
 class GeneticUI(QWidget):
@@ -146,8 +145,10 @@ class GeneticUI(QWidget):
         plt.grid()
         plt.show()
 
-
+"""
 app = QApplication(sys.argv)
 window = GeneticUI()
 window.show()
 sys.exit(app.exec())
+"""
+

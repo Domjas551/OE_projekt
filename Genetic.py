@@ -1,6 +1,6 @@
 import math
 
-from Chromosom import Chromosom
+from Chromosom import Chromosom, Chromosom2
 import numpy as np
 import random
 
@@ -161,7 +161,7 @@ class Genetic:
                 c2.extend(specimen1.chromosom_value[cut_point:])
 
                 ch1=Chromosom(len(c1))
-                ch2=Chromosom(len(c1))
+                ch2=Chromosom(len(c2))
                 ch1.set_chromosom(c1)
                 ch2.set_chromosom(c2)
 
@@ -329,7 +329,6 @@ class Genetic:
         for e in range(0,self.epochs):
 
             fitness_list=[]
-            pop2=[]
             new_pop=[]
             base_pop=[]
 
@@ -412,4 +411,150 @@ class Genetic:
         print(solution)
         print(solution.chromosom_value)
         print(self.fitness_function(solution))
+
+class Genetic2(Genetic):
+    def __init__(self, population_size, chromosom_size, lower_border, upper_border,epochs,accuracy=2):
+        self.population_size=population_size
+        self.chromosom_size=chromosom_size
+        self.lower_border=lower_border
+        self.upper_border=upper_border
+        self.epochs=epochs
+        self.population=[]
+
+        for i in range(0,population_size):
+            self.population.append(Chromosom2(chromosom_size,self.lower_border,self.upper_border,accuracy))
+
+    def fitness_function(self,specimen) -> float:
+        N=self.chromosom_size
+        return 10*N+np.sum(xi**2-10*np.cos(2*np.pi*xi) for xi in specimen.chromosom_values)
+
+    #TODO usun
+    def przelicz(self,population):
+        fitness_list=[]
+        # utworzenie tablicy z obliczonymi wartościami fitness function
+        for i in range(0, len(population)):
+            fitness_list.append(self.fitness_function(population[i]))
+        return fitness_list
+    #TODO jaka dokładność alfa w artm i chromosomie2
+    def crossing(self,specimen1,specimen2,chance,type=1):
+
+        """
+        Type:
+        1 - krzyżowanie arytmetyczne
+        2 - krzyżowanie mieszające typu alfa
+        3 - krzyżowanie mieszające typu alfa i beta
+        4 - krzyżowanie uśredniające - W JEGO WYNIKU TWORZONY JEST JEDEN OSOBNIK
+        """
+
+        ch = np.random.randint(0, 100)
+
+        if ch <= chance:
+
+            if type==1:
+                alfa=round(random.uniform(0,1),2)
+
+                v1=alfa*specimen1.chromosom_values[0]+(1-alfa)*specimen2.chromosom_values[0]
+                v2=alfa*specimen2.chromosom_values[0]+(1-alfa)*specimen1.chromosom_values[0]
+
+                #walidacja otrzymanych wartości
+                if v1>self.upper_border:
+                    v1=self.upper_border
+                elif v1<self.lower_border:
+                    v1=self.lower_border
+
+                if v2>self.upper_border:
+                    v2=self.upper_border
+                elif v2<self.lower_border:
+                    v2=self.lower_border
+
+                ch1 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border,False)
+                ch2 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border,False)
+                ch1.set_chromosom(v1)
+                ch2.set_chromosom(v2)
+
+                return [ch1, ch2]
+
+            elif type==2:
+                alfa = round(random.uniform(0, 1), 2)
+                d1=abs(specimen1.chromosom_values[0]-specimen2.chromosom_values[0])
+
+                v1=round(random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+                                        max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1), 2)
+                v2=round(random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+                                          max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1), 2)
+
+                # walidacja otrzymanych wartości
+                if v1 > self.upper_border:
+                    v1 = self.upper_border
+                elif v1 < self.lower_border:
+                    v1 = self.lower_border
+
+                if v2 > self.upper_border:
+                    v2 = self.upper_border
+                elif v2 < self.lower_border:
+                    v2 = self.lower_border
+
+                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
+                ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
+                ch1.set_chromosom(v1)
+                ch2.set_chromosom(v2)
+
+                return [ch1, ch2]
+
+            elif type==3:
+                alfa = round(random.uniform(0, 1), 2)
+                beta = round(random.uniform(0, 1), 2)
+                d1=abs(specimen1.chromosom_values[0]-specimen2.chromosom_values[0])
+
+                v1=round(random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+                                        max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1), 2)
+                v2=round(random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+                                          max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1), 2)
+
+                # walidacja otrzymanych wartości
+                if v1 > self.upper_border:
+                    v1 = self.upper_border
+                elif v1 < self.lower_border:
+                    v1 = self.lower_border
+
+                if v2 > self.upper_border:
+                    v2 = self.upper_border
+                elif v2 < self.lower_border:
+                    v2 = self.lower_border
+
+                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
+                ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
+                ch1.set_chromosom(v1)
+                ch2.set_chromosom(v2)
+
+                return [ch1, ch2]
+
+            elif type==4:
+
+                v1=(specimen1.chromosom_values[0]+specimen2.chromosom_values[0])/2
+
+                # walidacja otrzymanych wartości
+                if v1 > self.upper_border:
+                    v1 = self.upper_border
+                elif v1 < self.lower_border:
+                    v1 = self.lower_border
+
+                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
+                ch1.set_chromosom(v1)
+
+                return [ch1]
+        else:
+            return -1
+
+    def adapt(self):
+
+        for e in range(0,self.epochs,1):
+            fitness_list = []
+            new_pop = []
+            base_pop = []
+
+            # utworzenie tablicy z obliczonymi wartościami fitness function
+            for i in range(0, self.population_size):
+                fitness_list.append(self.fitness_function(self.population[i]))
+
 
