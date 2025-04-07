@@ -359,27 +359,27 @@ class Genetic:
 
                 if type_c==1:
                     if len(new_pop)==self.population_size-1:
-                        a=self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 1)[0]
+                        a=self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 1)
                         if a!=-1:
-                            new_pop.extend(a)
+                            new_pop.append(a[0])
                     else:
                         a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 1)
                         if a!=-1:
                             new_pop.extend(a)
                 elif type_c==2:
                     if len(new_pop) == self.population_size - 1:
-                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 2)[0]
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 2)
                         if a!=-1:
-                            new_pop.extend(a)
+                            new_pop.append(a[0])
                     else:
                         a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 2)
                         if a!=-1:
                             new_pop.extend(a)
                 elif type_c==3:
                     if len(new_pop) == self.population_size - 1:
-                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 3)[0]
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 3)
                         if a!=-1:
-                            new_pop.extend(a)
+                            new_pop.append(a[0])
                     else:
                         a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 3)
                         if a!=-1:
@@ -397,6 +397,8 @@ class Genetic:
 
             #zapisanie nowej populacji
             self.population=new_pop
+
+            fitness_list=[]
 
             # sprawdzenie uzyskanych wartości
             for i in range(0, self.population_size):
@@ -435,7 +437,7 @@ class Genetic2(Genetic):
         for i in range(0, len(population)):
             fitness_list.append(self.fitness_function(population[i]))
         return fitness_list
-    #TODO jaka dokładność alfa w artm i chromosomie2
+
     def crossing(self,specimen1,specimen2,chance,type=1):
 
         """
@@ -451,7 +453,7 @@ class Genetic2(Genetic):
         if ch <= chance:
 
             if type==1:
-                alfa=round(random.uniform(0,1),2)
+                alfa=random.uniform(0,1)
 
                 v1=alfa*specimen1.chromosom_values[0]+(1-alfa)*specimen2.chromosom_values[0]
                 v2=alfa*specimen2.chromosom_values[0]+(1-alfa)*specimen1.chromosom_values[0]
@@ -467,21 +469,21 @@ class Genetic2(Genetic):
                 elif v2<self.lower_border:
                     v2=self.lower_border
 
-                ch1 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border,False)
-                ch2 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border,False)
+                ch1 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border)
+                ch2 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border)
                 ch1.set_chromosom(v1)
                 ch2.set_chromosom(v2)
 
                 return [ch1, ch2]
 
             elif type==2:
-                alfa = round(random.uniform(0, 1), 2)
+                alfa =random.uniform(0, 1)
                 d1=abs(specimen1.chromosom_values[0]-specimen2.chromosom_values[0])
 
-                v1=round(random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
-                                        max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1), 2)
-                v2=round(random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
-                                          max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1), 2)
+                v1=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+                                        max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1)
+                v2=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+                                          max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1)
 
                 # walidacja otrzymanych wartości
                 if v1 > self.upper_border:
@@ -494,22 +496,22 @@ class Genetic2(Genetic):
                 elif v2 < self.lower_border:
                     v2 = self.lower_border
 
-                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
-                ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
+                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
+                ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
                 ch1.set_chromosom(v1)
                 ch2.set_chromosom(v2)
 
                 return [ch1, ch2]
 
             elif type==3:
-                alfa = round(random.uniform(0, 1), 2)
-                beta = round(random.uniform(0, 1), 2)
+                alfa =random.uniform(0, 1)
+                beta =random.uniform(0, 1)
                 d1=abs(specimen1.chromosom_values[0]-specimen2.chromosom_values[0])
 
-                v1=round(random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
-                                        max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1), 2)
-                v2=round(random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
-                                          max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1), 2)
+                v1=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+                                        max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1)
+                v2=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+                                          max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1)
 
                 # walidacja otrzymanych wartości
                 if v1 > self.upper_border:
@@ -522,8 +524,8 @@ class Genetic2(Genetic):
                 elif v2 < self.lower_border:
                     v2 = self.lower_border
 
-                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
-                ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
+                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
+                ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
                 ch1.set_chromosom(v1)
                 ch2.set_chromosom(v2)
 
@@ -539,16 +541,59 @@ class Genetic2(Genetic):
                 elif v1 < self.lower_border:
                     v1 = self.lower_border
 
-                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, False)
+                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
                 ch1.set_chromosom(v1)
 
                 return [ch1]
         else:
             return -1
 
-    def adapt(self):
+    def mutation(self,population,chance,type=1):
 
-        for e in range(0,self.epochs,1):
+        """
+        Type:
+        1 - mutacja równomierna
+        2 - mutacja Gaussa
+        """
+
+        for i in range(0,len(population)):
+            alfa = np.random.randint(0, 100)
+
+            if alfa <= chance:
+
+                if type==1:
+                    population[i].set_chromosom(random.uniform(self.lower_border,self.upper_border))
+
+                elif type==2:
+                    v1=population[i].chromosom_values
+                    for j in range(0,len(v1),1):
+                        v1[j] = v1[j] + np.random.normal()
+
+                        # walidacja otrzymanych wartości
+                        if v1[j] > self.upper_border:
+                            v1[j] = self.upper_border
+                        elif v1[j] < self.lower_border:
+                            v1[j] = self.lower_border
+
+                        population[i].set_chromosom(v1[j])
+
+
+    def adapt(self,type_s,type_c,type_m,chance_c,chance_m,elite_amount=2,t_size=3,t_amount=2):
+
+        """
+        type_s - typ selekcji, 1 - best, 2 - roullete, 3 - tournament
+        type_c - typ krzyżowania, 1 - krzyżowanie arytmetyczne, 2 - krzyżowanie mieszające typu alfa,
+        3 - krzyżowanie mieszające typu alfa i beta, 4 - krzyżowanie uśredniające
+        type_m - typ mutacji, 1 - równomierna, 2 - Gaussa
+        chance_c - szansa na krzyżowanie
+        chance_m - szansa mutacji
+        elite_amount - ilość osobników wybieranych w strategi elitarnej
+        t_size - ilość osobników w grupach w selekcji turniejowej
+        t_amount - ilość rund w selekcji turniejowej
+        """
+
+        for e in range(0, self.epochs):
+
             fitness_list = []
             new_pop = []
             base_pop = []
@@ -556,5 +601,80 @@ class Genetic2(Genetic):
             # utworzenie tablicy z obliczonymi wartościami fitness function
             for i in range(0, self.population_size):
                 fitness_list.append(self.fitness_function(self.population[i]))
+
+            # strategia elitarna
+            new_pop.extend(self.selection_best(elite_amount, fitness_list))
+
+            # selekcja
+            if type_s == 1:
+                base_pop.extend(self.selection_best(self.population_size // 2, fitness_list))
+            elif type_s == 2:
+                base_pop.extend(self.selection_roullete(self.population_size // 2, fitness_list))
+            elif type_s == 3:
+                base_pop.extend(self.selection_tournament(self.population_size // 2, t_size, t_amount, fitness_list))
+
+            # krzyżowanie
+            while len(new_pop) < self.population_size:
+
+                spec1 = 0
+                spec2 = 0
+
+                while spec1 == spec2:
+                    spec1 = np.random.randint(0, len(base_pop))
+                    spec2 = np.random.randint(0, len(base_pop))
+
+                if type_c == 1:
+                    if len(new_pop) == self.population_size - 1:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 1)
+                        if a != -1:
+                            new_pop.append(a[0])
+                    else:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 1)
+                        if a != -1:
+                            new_pop.extend(a)
+                elif type_c == 2:
+                    if len(new_pop) == self.population_size - 1:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 2)
+                        if a != -1:
+                            new_pop.append(a[0])
+                    else:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 2)
+                        if a != -1:
+                            new_pop.extend(a)
+                elif type_c == 3:
+                    if len(new_pop) == self.population_size - 1:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 3)
+                        if a != -1:
+                            new_pop.append(a[0])
+                    else:
+                        a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 3)
+                        if a != -1:
+                            new_pop.extend(a)
+                elif type_c == 4:
+                    a = self.crossing(base_pop[spec1], base_pop[spec2], chance_c, 4)
+                    if a != -1:
+                        new_pop.extend(a)
+
+            # mutacja
+            self.mutation(new_pop, chance_m, type_m)
+
+            # zapisanie nowej populacji
+            self.population = new_pop
+
+            fitness_list=[]
+
+            # sprawdzenie uzyskanych wartości
+            for i in range(0, self.population_size):
+                fitness_list.append(self.fitness_function(new_pop[i]))
+            print(fitness_list)
+
+        # wypisanie najlepszego rozwiązania
+        fl = []
+        for i in range(0, self.population_size):
+            fl.append(self.fitness_function(self.population[i]))
+        solution = self.selection_best(1, fl)[0]
+        print(solution)
+        print(solution.chromosom_values)
+        print(self.fitness_function(solution))
 
 

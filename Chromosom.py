@@ -13,12 +13,12 @@ class Chromosom:
         self.chromosom_value=chromosom_value
 
 class Chromosom2:
-    def __init__(self,number_of_values,min,max,accuracy=2,rnd=True):
+    def __init__(self,number_of_values,min,max,rnd=True):
         self.chromosom_values=[]
 
         if rnd:
             for i in range(0,number_of_values,1):
-                self.chromosom_values.append(round(random.uniform(min,max),accuracy))
+                self.chromosom_values.append(random.uniform(min,max))
 
     def set_chromosom(self,chromosom_value,index=0):
 
