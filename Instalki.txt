@@ -2,3 +2,9 @@
 Aby gui zadziałało niezbędna jest instalacja PyQt6
 
 pip install PyQt6
+
+#########################
+Projekt 3
+pip3 install benchmark_functions
+pip3 install scipy
+pip3 install pygad
