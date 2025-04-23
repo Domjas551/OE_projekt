@@ -1,8 +1,10 @@
 import sys
 import matplotlib.pyplot as plt
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QApplication
+from PyQt6.QtWidgets import QComboBox
 
-from Genetic import Genetic
+from Genetic import Genetic, Genetic2
+
 
 class GeneticUI(QWidget):
     def __init__(self):
@@ -12,6 +14,11 @@ class GeneticUI(QWidget):
         self.setGeometry(100, 100, 500, 600)
 
         layout = QVBoxLayout()
+
+        self.project_selector = QComboBox()
+        self.project_selector.addItems(["Projekt 1", "Projekt 2"])
+        layout.addWidget(QLabel("Wybierz Projekt"))
+        layout.addWidget(self.project_selector)
 
         # Pola do wpisania parametrów
         self.inputs = {}
@@ -61,40 +68,129 @@ class GeneticUI(QWidget):
         self.setLayout(layout)
         self.results = []  # Lista przechowująca wyniki
 
+    # def run_algorithm(self):
+    #     """ Pobranie danych z UI, uruchomienie algorytmu i wyświetlenie wyników """
+    #     population_size = int(self.inputs["Population Size"].text())
+    #     chromosom_size = int(self.inputs["Chromosom Size"].text())
+    #     min_range = float(self.inputs["Min Range"].text())
+    #     max_range = float(self.inputs["Max Range"].text())
+    #     epochs = int(self.inputs["Epochs"].text())
+    #     type_s = int(self.inputs["Selection Type (1-Best, 2-Roulette, 3-Tournament)"].text())
+    #     type_c = int(self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"].text())
+    #     type_m = int(self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"].text())
+    #     chance_c = int(self.inputs["Crossover Chance"].text())
+    #     chance_m = int(self.inputs["Mutation Chance"].text())
+    #     chance_in = int(self.inputs["Inversion Chance"].text())
+
+    #     # Uruchomienie algorytmu genetycznego
+    #     g = Genetic(population_size, chromosom_size, min_range, max_range, epochs)
+    #     g.adapt(type_s, type_c, type_m, chance_c, chance_m, chance_in)
+
+    #     # Znalezienie najlepszego rozwiązania
+    #     best_solution = min(g.population, key=g.fitness_function)
+
+    #     # Lista wyników
+    #     self.results = [g.fitness_function(ind) for ind in g.population]
+    #     result_text = (
+    #         f"Wyniki fitness dla populacji: \n{self.results}\n\n"
+    #         f"Najlepszy chromosom: {best_solution.chromosom_value}\n"
+    #         f"Jego wartość fitness: {g.fitness_function(best_solution)}"
+    #     )
+
+    #     self.result_text.setText(result_text)
+
+    #     # Aktywacja przycisków po wygenerowaniu wyników
+    #     self.save_button.setEnabled(True)
+    #     self.plot_button.setEnabled(True)
+
+    # def run_algorithm(self):
+    #     # Pobieranie danych z UI
+    #     project = self.project_selector.currentIndex()  # 0 = Projekt1, 1 = Projekt2
+    #     population_size = int(self.inputs["Population Size"].text())
+    #     chromosom_size = int(self.inputs["Chromosom Size"].text())
+    #     min_range = float(self.inputs["Min Range"].text())
+    #     max_range = float(self.inputs["Max Range"].text())
+    #     epochs = int(self.inputs["Epochs"].text())
+    #     type_s = int(self.inputs["Selection Type (1-Best, 2-Roulette, 3-Tournament)"].text())
+    #     type_c = int(self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"].text())
+    #     type_m = int(self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"].text())
+    #     chance_c = int(self.inputs["Crossover Chance"].text())
+    #     chance_m = int(self.inputs["Mutation Chance"].text())
+    #     chance_in = int(self.inputs["Inversion Chance"].text())
+
+    #     # Uruchomienie odpowiedniego algorytmu
+    #     if project == 0:
+    
+    #         g = Genetic(population_size, chromosom_size, min_range, max_range, epochs)
+    #     else:
+
+    #         g = Genetic2(population_size, chromosom_size, min_range, max_range, epochs)
+
+    #     g.adapt(type_s, type_c, type_m, chance_c, chance_m, chance_in)
+
+    #     best_solution = min(g.population, key=g.fitness_function)
+
+    #     self.results = [g.fitness_function(ind) for ind in g.population]
+    #     result_text = (
+    #         f"Wyniki fitness dla populacji: \n{self.results}\n\n"
+    #         f"Najlepszy chromosom: {best_solution.chromosom_value}\n"
+    #         f"Jego wartość fitness: {g.fitness_function(best_solution)}"
+    #     )
+    #     self.result_text.setText(result_text)
+
+    #     self.save_button.setEnabled(True)
+    #     self.plot_button.setEnabled(True)
+
     def run_algorithm(self):
-        """ Pobranie danych z UI, uruchomienie algorytmu i wyświetlenie wyników """
-        population_size = int(self.inputs["Population Size"].text())
-        chromosom_size = int(self.inputs["Chromosom Size"].text())
-        min_range = float(self.inputs["Min Range"].text())
-        max_range = float(self.inputs["Max Range"].text())
-        epochs = int(self.inputs["Epochs"].text())
-        type_s = int(self.inputs["Selection Type (1-Best, 2-Roulette, 3-Tournament)"].text())
-        type_c = int(self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"].text())
-        type_m = int(self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"].text())
-        chance_c = int(self.inputs["Crossover Chance"].text())
-        chance_m = int(self.inputs["Mutation Chance"].text())
-        chance_in = int(self.inputs["Inversion Chance"].text())
+        try:
+            # Pobieranie danych z UI
+            project = self.project_selector.currentIndex()
+            population_size = int(self.inputs["Population Size"].text())
+            chromosom_size = int(self.inputs["Chromosom Size"].text())
+            min_range = float(self.inputs["Min Range"].text())
+            max_range = float(self.inputs["Max Range"].text())
+            epochs = int(self.inputs["Epochs"].text())
+            type_s = int(self.inputs["Selection Type (1-Best, 2-Roulette, 3-Tournament)"].text())
+            type_c = int(self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"].text())
+            type_m = int(self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"].text())
+            chance_c = int(self.inputs["Crossover Chance"].text())
+            chance_m = int(self.inputs["Mutation Chance"].text())
+            chance_in = int(self.inputs["Inversion Chance"].text())
 
-        # Uruchomienie algorytmu genetycznego
-        g = Genetic(population_size, chromosom_size, min_range, max_range, epochs)
-        g.adapt(type_s, type_c, type_m, chance_c, chance_m, chance_in)
+            # Uruchomienie odpowiedniego algorytmu
+            if project == 0:
+                g = Genetic(population_size, chromosom_size, min_range, max_range, epochs)
+            else:
+                g = Genetic2(population_size, chromosom_size, min_range, max_range, epochs)
 
-        # Znalezienie najlepszego rozwiązania
-        best_solution = min(g.population, key=g.fitness_function)
+            g.adapt(type_s, type_c, type_m, chance_c, chance_m, chance_in)
 
-        # Lista wyników
-        self.results = [g.fitness_function(ind) for ind in g.population]
-        result_text = (
-            f"Wyniki fitness dla populacji: \n{self.results}\n\n"
-            f"Najlepszy chromosom: {best_solution.chromosom_value}\n"
-            f"Jego wartość fitness: {g.fitness_function(best_solution)}"
-        )
+            best_solution = min(g.population, key=g.fitness_function)
 
-        self.result_text.setText(result_text)
+            self.results = [g.fitness_function(ind) for ind in g.population]
+            
+            if hasattr(best_solution, "chromosom_value"):
+                chromo_value = best_solution.chromosom_value
+            elif hasattr(best_solution, "chromosom_values"):
+                    chromo_value = best_solution.chromosom_values
+            else:
+                    chromo_value = str(best_solution)
 
-        # Aktywacja przycisków po wygenerowaniu wyników
-        self.save_button.setEnabled(True)
-        self.plot_button.setEnabled(True)
+            result_text = (
+                f"Wyniki fitness dla populacji: \n{self.results}\n\n"
+                f"Najlepszy chromosom: {chromo_value}\n"
+                f"Jego wartość fitness: {g.fitness_function(best_solution)}"
+                )
+
+            self.result_text.setText(result_text)
+
+            self.save_button.setEnabled(True)
+            self.plot_button.setEnabled(True)
+
+        except Exception as e:
+            # If any error occurs, show it in the QTextEdit instead of crashing
+            self.result_text.setText(f"ERROR: {str(e)}")
+
 
     def save_results(self):
       """ Zapisuje wyniki do pliku, dodając je do istniejących danych """

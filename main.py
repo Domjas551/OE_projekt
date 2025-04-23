@@ -1,5 +1,7 @@
 import math
 import random
+import sys
+from PyQt6.QtWidgets import QApplication
 
 import numpy as np
 
@@ -14,16 +16,21 @@ def print_hi(name):
 
 
 
-if __name__ == '__main__':
-    """g=Genetic(20,20,-5.12,5.12,2)
-    g.adapt(3,4,3,70,20,10)"""
-    c=Chromosom2(1,-5.12,5.12)
-    g2=Genetic2(10,1,-5.12,5.12,1)
+# if __name__ == '__main__':
+#     """g=Genetic(20,20,-5.12,5.12,2)
+#     g.adapt(3,4,3,70,20,10)"""
+#     c=Chromosom2(1,-5.12,5.12)
+#     g2=Genetic2(10,1,-5.12,5.12,1)
 
-    g2.adapt(1,1,2,70,20)
-    a=[]
-    a.append(c)
+#     g2.adapt(1,1,2,70,20)
+#     a=[]
+#     a.append(c)
 
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = GeneticUI()
+    window.show()
+    sys.exit(app.exec())
 
 
 

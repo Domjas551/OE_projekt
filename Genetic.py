@@ -438,144 +438,218 @@ class Genetic2(Genetic):
             fitness_list.append(self.fitness_function(population[i]))
         return fitness_list
 
-    def crossing(self,specimen1,specimen2,chance,type=1):
+    # def crossing(self,specimen1,specimen2,chance,type=1):
 
-        """
-        Type:
-        1 - krzyżowanie arytmetyczne
-        2 - krzyżowanie mieszające typu alfa
-        3 - krzyżowanie mieszające typu alfa i beta
-        4 - krzyżowanie uśredniające - W JEGO WYNIKU TWORZONY JEST JEDEN OSOBNIK
-        """
+    #     """
+    #     Type:
+    #     1 - krzyżowanie arytmetyczne
+    #     2 - krzyżowanie mieszające typu alfa
+    #     3 - krzyżowanie mieszające typu alfa i beta
+    #     4 - krzyżowanie uśredniające - W JEGO WYNIKU TWORZONY JEST JEDEN OSOBNIK
+    #     """
 
+    #     ch = np.random.randint(0, 100)
+
+    #     if ch <= chance:
+
+    #         if type==1:
+    #             alfa=random.uniform(0,1)
+
+    #             v1=alfa*specimen1.chromosom_values[0]+(1-alfa)*specimen2.chromosom_values[0]
+    #             v2=alfa*specimen2.chromosom_values[0]+(1-alfa)*specimen1.chromosom_values[0]
+
+    #             #walidacja otrzymanych wartości
+    #             if v1>self.upper_border:
+    #                 v1=self.upper_border
+    #             elif v1<self.lower_border:
+    #                 v1=self.lower_border
+
+    #             if v2>self.upper_border:
+    #                 v2=self.upper_border
+    #             elif v2<self.lower_border:
+    #                 v2=self.lower_border
+
+    #             ch1 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border)
+    #             ch2 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border)
+    #             ch1.set_chromosom(v1)
+    #             ch2.set_chromosom(v2)
+
+    #             return [ch1, ch2]
+
+    #         elif type==2:
+    #             alfa =random.uniform(0, 1)
+    #             d1=abs(specimen1.chromosom_values[0]-specimen2.chromosom_values[0])
+
+    #             v1=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+    #                                     max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1)
+    #             v2=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+    #                                       max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1)
+
+    #             # walidacja otrzymanych wartości
+    #             if v1 > self.upper_border:
+    #                 v1 = self.upper_border
+    #             elif v1 < self.lower_border:
+    #                 v1 = self.lower_border
+
+    #             if v2 > self.upper_border:
+    #                 v2 = self.upper_border
+    #             elif v2 < self.lower_border:
+    #                 v2 = self.lower_border
+
+    #             ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
+    #             ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
+    #             ch1.set_chromosom(v1)
+    #             ch2.set_chromosom(v2)
+
+    #             return [ch1, ch2]
+
+    #         elif type==3:
+    #             alfa =random.uniform(0, 1)
+    #             beta =random.uniform(0, 1)
+    #             d1=abs(specimen1.chromosom_values[0]-specimen2.chromosom_values[0])
+
+    #             v1=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+    #                                     max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1)
+    #             v2=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
+    #                                       max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1)
+
+    #             # walidacja otrzymanych wartości
+    #             if v1 > self.upper_border:
+    #                 v1 = self.upper_border
+    #             elif v1 < self.lower_border:
+    #                 v1 = self.lower_border
+
+    #             if v2 > self.upper_border:
+    #                 v2 = self.upper_border
+    #             elif v2 < self.lower_border:
+    #                 v2 = self.lower_border
+
+    #             ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
+    #             ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
+    #             ch1.set_chromosom(v1)
+    #             ch2.set_chromosom(v2)
+
+    #             return [ch1, ch2]
+
+    #         elif type==4:
+
+    #             v1=(specimen1.chromosom_values[0]+specimen2.chromosom_values[0])/2
+
+    #             # walidacja otrzymanych wartości
+    #             if v1 > self.upper_border:
+    #                 v1 = self.upper_border
+    #             elif v1 < self.lower_border:
+    #                 v1 = self.lower_border
+
+    #             ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
+    #             ch1.set_chromosom(v1)
+
+    #             return [ch1]
+    #     else:
+    #         return -1
+
+    def crossing(self, specimen1, specimen2, chance, type=1):
         ch = np.random.randint(0, 100)
-
-        if ch <= chance:
-
-            if type==1:
-                alfa=random.uniform(0,1)
-
-                v1=alfa*specimen1.chromosom_values[0]+(1-alfa)*specimen2.chromosom_values[0]
-                v2=alfa*specimen2.chromosom_values[0]+(1-alfa)*specimen1.chromosom_values[0]
-
-                #walidacja otrzymanych wartości
-                if v1>self.upper_border:
-                    v1=self.upper_border
-                elif v1<self.lower_border:
-                    v1=self.lower_border
-
-                if v2>self.upper_border:
-                    v2=self.upper_border
-                elif v2<self.lower_border:
-                    v2=self.lower_border
-
-                ch1 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border)
-                ch2 = Chromosom2(self.chromosom_size,self.lower_border,self.upper_border)
-                ch1.set_chromosom(v1)
-                ch2.set_chromosom(v2)
-
-                return [ch1, ch2]
-
-            elif type==2:
-                alfa =random.uniform(0, 1)
-                d1=abs(specimen1.chromosom_values[0]-specimen2.chromosom_values[0])
-
-                v1=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
-                                        max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1)
-                v2=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
-                                          max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+alfa*d1)
-
-                # walidacja otrzymanych wartości
-                if v1 > self.upper_border:
-                    v1 = self.upper_border
-                elif v1 < self.lower_border:
-                    v1 = self.lower_border
-
-                if v2 > self.upper_border:
-                    v2 = self.upper_border
-                elif v2 < self.lower_border:
-                    v2 = self.lower_border
-
-                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
-                ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
-                ch1.set_chromosom(v1)
-                ch2.set_chromosom(v2)
-
-                return [ch1, ch2]
-
-            elif type==3:
-                alfa =random.uniform(0, 1)
-                beta =random.uniform(0, 1)
-                d1=abs(specimen1.chromosom_values[0]-specimen2.chromosom_values[0])
-
-                v1=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
-                                        max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1)
-                v2=random.uniform(min(specimen1.chromosom_values[0],specimen2.chromosom_values[0])-alfa*d1,
-                                          max(specimen1.chromosom_values[0],specimen2.chromosom_values[0])+beta*d1)
-
-                # walidacja otrzymanych wartości
-                if v1 > self.upper_border:
-                    v1 = self.upper_border
-                elif v1 < self.lower_border:
-                    v1 = self.lower_border
-
-                if v2 > self.upper_border:
-                    v2 = self.upper_border
-                elif v2 < self.lower_border:
-                    v2 = self.lower_border
-
-                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
-                ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
-                ch1.set_chromosom(v1)
-                ch2.set_chromosom(v2)
-
-                return [ch1, ch2]
-
-            elif type==4:
-
-                v1=(specimen1.chromosom_values[0]+specimen2.chromosom_values[0])/2
-
-                # walidacja otrzymanych wartości
-                if v1 > self.upper_border:
-                    v1 = self.upper_border
-                elif v1 < self.lower_border:
-                    v1 = self.lower_border
-
-                ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border)
-                ch1.set_chromosom(v1)
-
-                return [ch1]
-        else:
+        if ch > chance:
             return -1
 
-    def mutation(self,population,chance,type=1):
+        child1_values = []
+        child2_values = []
 
+        for i in range(self.chromosom_size):
+            x1 = specimen1.chromosom_values[i]
+            x2 = specimen2.chromosom_values[i]
+
+            if type == 1:  # arytmetyczne
+                alfa = random.uniform(0, 1)
+                v1 = alfa * x1 + (1 - alfa) * x2
+                v2 = alfa * x2 + (1 - alfa) * x1
+
+            elif type == 2:  # mieszające alfa
+                alfa = random.uniform(0, 1)
+                d = abs(x1 - x2)
+                v1 = random.uniform(min(x1, x2) - alfa * d, max(x1, x2) + alfa * d)
+                v2 = random.uniform(min(x1, x2) - alfa * d, max(x1, x2) + alfa * d)
+
+            elif type == 3:  # mieszające alfa i beta
+                alfa = random.uniform(0, 1)
+                beta = random.uniform(0, 1)
+                d = abs(x1 - x2)
+                v1 = random.uniform(min(x1, x2) - alfa * d, max(x1, x2) + beta * d)
+                v2 = random.uniform(min(x1, x2) - alfa * d, max(x1, x2) + beta * d)
+
+            elif type == 4:  # uśredniające
+                v1 = (x1 + x2) / 2
+                v2 = (x1 + x2) / 2
+
+            else:
+                raise Exception("Nieznany typ krzyżowania")
+
+            # walidacja
+            v1 = max(self.lower_border, min(self.upper_border, v1))
+            v2 = max(self.lower_border, min(self.upper_border, v2))
+
+            child1_values.append(v1)
+            child2_values.append(v2)
+
+        ch1 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, rnd=False)
+        ch2 = Chromosom2(self.chromosom_size, self.lower_border, self.upper_border, rnd=False)
+
+        ch1.chromosom_values = child1_values
+        ch2.chromosom_values = child2_values
+
+        return [ch1, ch2]
+
+    # def mutation(self,population,chance,type=1):
+
+    #     """
+    #     Type:
+    #     1 - mutacja równomierna
+    #     2 - mutacja Gaussa
+    #     """
+
+    #     for i in range(0,len(population)):
+    #         alfa = np.random.randint(0, 100)
+
+    #         if alfa <= chance:
+
+    #             if type==1:
+    #                 population[i].set_chromosom(random.uniform(self.lower_border,self.upper_border))
+
+    #             elif type==2:
+    #                 v1=population[i].chromosom_values
+    #                 for j in range(0,len(v1),1):
+    #                     v1[j] = v1[j] + np.random.normal()
+
+    #                     # walidacja otrzymanych wartości
+    #                     if v1[j] > self.upper_border:
+    #                         v1[j] = self.upper_border
+    #                     elif v1[j] < self.lower_border:
+    #                         v1[j] = self.lower_border
+
+    #                     population[i].set_chromosom(v1[j])
+
+    def mutation(self, population, chance, type=1):
         """
         Type:
         1 - mutacja równomierna
         2 - mutacja Gaussa
         """
-
-        for i in range(0,len(population)):
+        for specimen in population:
             alfa = np.random.randint(0, 100)
-
             if alfa <= chance:
+                if type == 1:
+                    # Mutuj wszystkie geny losowo
+                    for i in range(len(specimen.chromosom_values)):
+                        specimen.chromosom_values[i] = random.uniform(self.lower_border, self.upper_border)
 
-                if type==1:
-                    population[i].set_chromosom(random.uniform(self.lower_border,self.upper_border))
+                elif type == 2:
+                    for i in range(len(specimen.chromosom_values)):
+                        specimen.chromosom_values[i] += np.random.normal()
 
-                elif type==2:
-                    v1=population[i].chromosom_values
-                    for j in range(0,len(v1),1):
-                        v1[j] = v1[j] + np.random.normal()
+                        # walidacja
+                        specimen.chromosom_values[i] = max(self.lower_border, min(self.upper_border, specimen.chromosom_values[i]))
 
-                        # walidacja otrzymanych wartości
-                        if v1[j] > self.upper_border:
-                            v1[j] = self.upper_border
-                        elif v1[j] < self.lower_border:
-                            v1[j] = self.lower_border
-
-                        population[i].set_chromosom(v1[j])
 
 
     def adapt(self,type_s,type_c,type_m,chance_c,chance_m,elite_amount=2,t_size=3,t_amount=2):
