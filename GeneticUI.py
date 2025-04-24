@@ -17,6 +17,9 @@ class GeneticUI(QWidget):
 
         self.project_selector = QComboBox()
         self.project_selector.addItems(["Projekt 1", "Projekt 2"])
+
+        self.project_selector.currentIndexChanged.connect(self.update_algorithm_labels)
+
         layout.addWidget(QLabel("Wybierz Projekt"))
         layout.addWidget(self.project_selector)
 
@@ -66,80 +69,39 @@ class GeneticUI(QWidget):
         layout.addWidget(self.result_text)
 
         self.setLayout(layout)
-        self.results = []  # Lista przechowująca wyniki
+        self.results = [] 
 
-    # def run_algorithm(self):
-    #     """ Pobranie danych z UI, uruchomienie algorytmu i wyświetlenie wyników """
-    #     population_size = int(self.inputs["Population Size"].text())
-    #     chromosom_size = int(self.inputs["Chromosom Size"].text())
-    #     min_range = float(self.inputs["Min Range"].text())
-    #     max_range = float(self.inputs["Max Range"].text())
-    #     epochs = int(self.inputs["Epochs"].text())
-    #     type_s = int(self.inputs["Selection Type (1-Best, 2-Roulette, 3-Tournament)"].text())
-    #     type_c = int(self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"].text())
-    #     type_m = int(self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"].text())
-    #     chance_c = int(self.inputs["Crossover Chance"].text())
-    #     chance_m = int(self.inputs["Mutation Chance"].text())
-    #     chance_in = int(self.inputs["Inversion Chance"].text())
+    def update_algorithm_labels(self):
+        index = self.project_selector.currentIndex()
 
-    #     # Uruchomienie algorytmu genetycznego
-    #     g = Genetic(population_size, chromosom_size, min_range, max_range, epochs)
-    #     g.adapt(type_s, type_c, type_m, chance_c, chance_m, chance_in)
+        mutation_field = self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"]
+        crossover_field = self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"]
+        
+        mutation_label = None
+        crossover_label = None
 
-    #     # Znalezienie najlepszego rozwiązania
-    #     best_solution = min(g.population, key=g.fitness_function)
+        for widget in self.findChildren(QLabel):
+            if widget.text().startswith("Mutation Type"):
+                mutation_label = widget
+            elif widget.text().startswith("Crossover Type"):
+                crossover_label = widget
 
-    #     # Lista wyników
-    #     self.results = [g.fitness_function(ind) for ind in g.population]
-    #     result_text = (
-    #         f"Wyniki fitness dla populacji: \n{self.results}\n\n"
-    #         f"Najlepszy chromosom: {best_solution.chromosom_value}\n"
-    #         f"Jego wartość fitness: {g.fitness_function(best_solution)}"
-    #     )
+        if index == 0:
+            mutation_field.setText("3")
+            crossover_field.setText("4")
+            if mutation_label:
+                mutation_label.setText("Mutation Type (1 - Edge, 2 - One Point, 3 - Two Points)")
+            if crossover_label:
+                crossover_label.setText("Crossover Type (1 - Single Point, 2 - Two Points, 3 - Uniform, 4 - Grainy)")
+        else:
+            # Project 2: Real-coded genetic algorithm
+            mutation_field.setText("1")
+            crossover_field.setText("1")
+            if mutation_label:
+                mutation_label.setText("Mutation Type (1 - Uniform, 2 - Gaussian)")
+            if crossover_label:
+                crossover_label.setText("Crossover Type (1 - Arithmetic, 2 - Alpha Blend, 3 - Alpha-Beta Blend, 4 - Averaging)")
 
-    #     self.result_text.setText(result_text)
-
-    #     # Aktywacja przycisków po wygenerowaniu wyników
-    #     self.save_button.setEnabled(True)
-    #     self.plot_button.setEnabled(True)
-
-    # def run_algorithm(self):
-    #     # Pobieranie danych z UI
-    #     project = self.project_selector.currentIndex()  # 0 = Projekt1, 1 = Projekt2
-    #     population_size = int(self.inputs["Population Size"].text())
-    #     chromosom_size = int(self.inputs["Chromosom Size"].text())
-    #     min_range = float(self.inputs["Min Range"].text())
-    #     max_range = float(self.inputs["Max Range"].text())
-    #     epochs = int(self.inputs["Epochs"].text())
-    #     type_s = int(self.inputs["Selection Type (1-Best, 2-Roulette, 3-Tournament)"].text())
-    #     type_c = int(self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"].text())
-    #     type_m = int(self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"].text())
-    #     chance_c = int(self.inputs["Crossover Chance"].text())
-    #     chance_m = int(self.inputs["Mutation Chance"].text())
-    #     chance_in = int(self.inputs["Inversion Chance"].text())
-
-    #     # Uruchomienie odpowiedniego algorytmu
-    #     if project == 0:
-    
-    #         g = Genetic(population_size, chromosom_size, min_range, max_range, epochs)
-    #     else:
-
-    #         g = Genetic2(population_size, chromosom_size, min_range, max_range, epochs)
-
-    #     g.adapt(type_s, type_c, type_m, chance_c, chance_m, chance_in)
-
-    #     best_solution = min(g.population, key=g.fitness_function)
-
-    #     self.results = [g.fitness_function(ind) for ind in g.population]
-    #     result_text = (
-    #         f"Wyniki fitness dla populacji: \n{self.results}\n\n"
-    #         f"Najlepszy chromosom: {best_solution.chromosom_value}\n"
-    #         f"Jego wartość fitness: {g.fitness_function(best_solution)}"
-    #     )
-    #     self.result_text.setText(result_text)
-
-    #     self.save_button.setEnabled(True)
-    #     self.plot_button.setEnabled(True)
 
     def run_algorithm(self):
         try:
