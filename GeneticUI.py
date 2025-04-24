@@ -9,7 +9,9 @@ from Genetic import Genetic, Genetic2
 class GeneticUI(QWidget):
     def __init__(self):
         super().__init__()
-        
+        self.mutation_field = None
+        self.crossover_field = None
+
         self.setWindowTitle("Algorytm Genetyczny")
         self.setGeometry(100, 100, 500, 600)
 
@@ -19,6 +21,7 @@ class GeneticUI(QWidget):
         self.project_selector.addItems(["Projekt 1", "Projekt 2"])
 
         self.project_selector.currentIndexChanged.connect(self.update_algorithm_labels)
+        
 
         layout.addWidget(QLabel("Wybierz Projekt"))
         layout.addWidget(self.project_selector)
@@ -40,11 +43,17 @@ class GeneticUI(QWidget):
         ]
 
         for label_text, default_value in params:
-            label = QLabel(label_text)
-            line_edit = QLineEdit(default_value)
-            self.inputs[label_text] = line_edit
-            layout.addWidget(label)
-            layout.addWidget(line_edit)
+          label = QLabel(label_text)
+          line_edit = QLineEdit(default_value)
+          self.inputs[label_text] = line_edit
+
+          if "Mutation Type" in label_text:
+              self.mutation_field = line_edit
+          elif "Crossover Type" in label_text:
+              self.crossover_field = line_edit
+
+          layout.addWidget(label)
+          layout.addWidget(line_edit)
 
         # Przycisk do uruchomienia algorytmu
         self.run_button = QPushButton("Uruchom Algorytm")
@@ -113,8 +122,8 @@ class GeneticUI(QWidget):
             max_range = float(self.inputs["Max Range"].text())
             epochs = int(self.inputs["Epochs"].text())
             type_s = int(self.inputs["Selection Type (1-Best, 2-Roulette, 3-Tournament)"].text())
-            type_c = int(self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"].text())
-            type_m = int(self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"].text())
+            type_c = int(self.crossover_field.text())
+            type_m = int(self.mutation_field.text())
             chance_c = int(self.inputs["Crossover Chance"].text())
             chance_m = int(self.inputs["Mutation Chance"].text())
             chance_in = int(self.inputs["Inversion Chance"].text())
@@ -163,8 +172,8 @@ class GeneticUI(QWidget):
       max_range = float(self.inputs["Max Range"].text())
       epochs = int(self.inputs["Epochs"].text())
       type_s = int(self.inputs["Selection Type (1-Best, 2-Roulette, 3-Tournament)"].text())
-      type_c = int(self.inputs["Crossover Type (1-Point, 2-Two Points, 3-Uniform, 4-Grainy)"].text())
-      type_m = int(self.inputs["Mutation Type (1-Edge, 2-One Point, 3-Two Points)"].text())
+      type_c = int(self.crossover_field.text())
+      type_m = int(self.mutation_field.text())
       chance_c = int(self.inputs["Crossover Chance"].text())
       chance_m = int(self.inputs["Mutation Chance"].text())
       chance_in = int(self.inputs["Inversion Chance"].text())
