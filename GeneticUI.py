@@ -104,6 +104,7 @@ class GeneticUI(QWidget):
                 crossover_label.setText("Crossover Type (1 - Single Point, 2 - Two Points, 3 - Uniform, 4 - Grainy)")
         else:
             # Project 2: Real-coded genetic algorithm
+            self.inputs["Population Size"].setText("1")
             mutation_field.setText("1")
             crossover_field.setText("1")
             if mutation_label:
