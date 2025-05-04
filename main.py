@@ -1,5 +1,7 @@
 import math
 import random
+import sys
+from PyQt6.QtWidgets import QApplication
 
 import numpy as np
 
@@ -24,10 +26,7 @@ if __name__ == '__main__':
     a=[]
     a.append(c)
 
-
-
-
-
-
-
-
+    app = QApplication(sys.argv)
+    window = GeneticUI()
+    window.show()
+    sys.exit(app.exec())

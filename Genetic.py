@@ -548,6 +548,7 @@ class Genetic2(Genetic):
         else:
             return -1
 
+
     def mutation(self,population,chance,type=1):
 
         """
