@@ -71,7 +71,7 @@ ga_instance = pygad.GA(num_generations=num_generations,
           random_mutation_min_val=-32.768,
           logger=logger,
           on_generation=on_generation,
-          parallel_processing=['thread', 4])
+          parallel_processing=None)
 
 ga_instance.run()
 
@@ -86,4 +86,49 @@ print("Fitness value of the best solution = {solution_fitness}".format(solution_
 ga_instance.best_solutions_fitness = [1. / x for x in ga_instance.best_solutions_fitness]
 ga_instance.plot_fitness()
 
+num_genes=32
+func = bf.Rastrigin(1)
+def fitness_func_binary(ga_instance, solution, solution_idx):
+    for i, x in enumerate(solution):
+        if x >= 2.0:
+            solution[i] = 1.99
+    decode = -5.12+int(''.join(map(str, numpy.array(solution).astype(int))),2)*(5.12+5.12)/(pow(2,num_genes)-1)
+    if func([decode]) == 0.0:
+        return 9999999999.
+    return 1./func([decode])
+init_pop = []
+for i in range(0, sol_per_pop):
+    init_pop.append(numpy.random.randint(0,2,size=num_genes))
 
+ga_instance = pygad.GA(num_generations=num_generations,
+          initial_population=init_pop,
+          sol_per_pop=sol_per_pop,
+          num_parents_mating=num_parents_mating,
+          num_genes=num_genes,
+          fitness_func=fitness_func_binary,
+          init_range_low=init_range_low,
+          init_range_high=init_range_high,
+          mutation_num_genes=mutation_num_genes,
+          parent_selection_type=parent_selection_type,
+          crossover_type=crossover_type,
+          mutation_type=mutation_type,
+          keep_elitism= 1,
+          K_tournament=3,
+          random_mutation_max_val=1,
+          random_mutation_min_val=0,
+          logger=logger,
+          on_generation=on_generation,
+          parallel_processing=None)
+
+ga_instance.run()
+
+
+best = ga_instance.best_solution()
+solution, solution_fitness, solution_idx = ga_instance.best_solution()
+print("Parameters of the best solution : {solution}".format(solution=numpy.array(solution).astype(int)))
+print("Fitness value of the best solution = {solution_fitness}".format(solution_fitness=1./solution_fitness))
+
+
+# sztuczka: odwracamy my narysował nam się oczekiwany wykres dla problemu minimalizacji
+ga_instance.best_solutions_fitness = [1. / x for x in ga_instance.best_solutions_fitness]
+ga_instance.plot_fitness()
