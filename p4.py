@@ -18,3 +18,4 @@ threshold = 3
 
 model = DevBRO(epoch, pop_size, threshold)
 best = model.solve(problem_dict)
+print(best)
